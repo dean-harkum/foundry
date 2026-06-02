@@ -47,12 +47,16 @@ jobs:
 
       - name: Run terragrunt plan in lucky-function/main
         if: ${{ github.event.inputs.target == 'main' }}
+        env:
+          GOOGLE_PROJECT_VAR: ${{ secrets.GCP_STATE_PROJECT }}
         run: |
           cd terragrunt/lucky-function/main
           terragrunt plan --terragrunt-non-interactive
 
       - name: Run terragrunt run-all plan in lucky-function/demo-stack
         if: ${{ github.event.inputs.target == 'demo-stack' }}
+        env:
+          GOOGLE_PROJECT_VAR: ${{ secrets.GCP_STATE_PROJECT }}
         run: |
           cd terragrunt/lucky-function/demo-stack
           terragrunt run-all plan --terragrunt-non-interactive

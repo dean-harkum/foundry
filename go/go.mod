@@ -1,3 +1,3 @@
-module practice/go/base
+module go
 
 go 1.21.1

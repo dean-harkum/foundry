@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"practice/go/base/leet"
+	"go/leet"
 )
 
 func main() {

@@ -1,7 +1,7 @@
 package leet
 
 import (
-	"practice/go/base/utils"
+	"go/utils"
 )
 
 func LongestCommonPrefix(strs []string) string {

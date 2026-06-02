@@ -2,7 +2,7 @@ package leet
 
 import (
 	"fmt"
-	"practice/go/base/utils"
+	"go/utils"
 )
 
 func IsValidParanthesis(s string) bool {

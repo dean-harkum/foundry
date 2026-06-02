@@ -22,7 +22,7 @@ on:
 
 jobs:
   plan:
-    name: Run Terragrunt plans
+    name: Run Terragrunt plan
     runs-on: ubuntu-latest
 
     steps:

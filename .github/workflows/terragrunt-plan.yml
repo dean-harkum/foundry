@@ -1,0 +1,62 @@
+name: Terragrunt Plan
+
+on:
+  workflow_dispatch:
+    inputs:
+      terraform_version:
+        description: "Terraform version to install"
+        required: false
+        default: "1.10.5"
+      terragrunt_version:
+        description: "Terragrunt release tag to install"
+        required: false
+        default: "v0.73.7"
+      target:
+        description: "Which Terragrunt plan to run"
+        required: true
+        default: "main"
+        type: choice
+        options:
+          - main
+          - demo-stack
+
+jobs:
+  plan:
+    name: Run Terragrunt plans
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP using service account key
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ github.event.inputs.terraform_version }}
+
+      - name: Install Terragrunt
+        run: |
+          curl -L -o /tmp/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${{ github.event.inputs.terragrunt_version }}/terragrunt_linux_amd64
+          chmod +x /tmp/terragrunt
+          sudo mv /tmp/terragrunt /usr/local/bin/
+
+      - name: Run terragrunt plan in lucky-function/main
+        if: ${{ github.event.inputs.target == 'main' }}
+        env:
+          GOOGLE_PROJECT_VAR: ${{ secrets.GCP_STATE_PROJECT }}
+        run: |
+          cd terragrunt/lucky-function/main
+          terragrunt plan --terragrunt-non-interactive
+
+      - name: Run terragrunt run-all plan in lucky-function/demo-stack
+        if: ${{ github.event.inputs.target == 'demo-stack' }}
+        env:
+          GOOGLE_PROJECT_VAR: ${{ secrets.GCP_STATE_PROJECT }}
+        run: |
+          cd terragrunt/lucky-function/demo-stack
+          terragrunt run-all plan --terragrunt-non-interactive

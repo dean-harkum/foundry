@@ -1,0 +1,59 @@
+name: Terragrunt Plan
+
+on:
+  workflow_dispatch:
+    inputs:
+      terraform_version:
+        description: "Terraform version to install"
+        required: false
+        default: "1.6.7"
+      terragrunt_version:
+        description: "Terragrunt release tag to install"
+        required: false
+        default: "v0.73.7"
+      target:
+        description: "Which Terragrunt plan to run"
+        required: true
+        default: "main"
+        type: choice
+        options:
+          - main
+          - demo-stack
+
+jobs:
+  plan:
+    name: Run Terragrunt plans
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP using OIDC
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ github.event.inputs.terraform_version }}
+
+      - name: Install Terragrunt
+        run: |
+          curl -L -o terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${{ github.event.inputs.terragrunt_version }}/terragrunt_linux_amd64
+          chmod +x terragrunt
+          sudo mv terragrunt /usr/local/bin/
+
+      - name: Run terragrunt plan in lucky-function/main
+        if: ${{ github.event.inputs.target == 'main' }}
+        run: |
+          cd terragrunt/lucky-function/main
+          terragrunt plan --terragrunt-non-interactive
+
+      - name: Run terragrunt run-all plan in lucky-function/demo-stack
+        if: ${{ github.event.inputs.target == 'demo-stack' }}
+        run: |
+          cd terragrunt/lucky-function/demo-stack
+          terragrunt run-all plan --terragrunt-non-interactive

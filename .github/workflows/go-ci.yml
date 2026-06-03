@@ -23,18 +23,18 @@ jobs:
 
       - name: Install dependencies
         run: go mod tidy
-        working-directory: ./practice/go/base
+        working-directory: ./go
 
       - name: Install golangci-lint
         run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
       - name: Run golangci-lint
         run: golangci-lint run ./...
-        working-directory: ./practice/go/base
+        working-directory: ./go
 
       - name: Run tests and generate coverage report
         run: go test -coverprofile=coverage.out ./...
-        working-directory: ./practice/go/base
+        working-directory: ./go
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4.0.1
@@ -47,18 +47,18 @@ jobs:
 
       - name: Build
         run: go build -v ./...
-        working-directory: ./practice/go/base
+        working-directory: ./go
 
       - name: Install Nancy
         run: go install github.com/sonatype-nexus-community/nancy@latest
 
       - name: Run Nancy
         run: go list -json -deps ./... | nancy sleuth --loud
-        working-directory: ./practice/go/base
+        working-directory: ./go
 
       - name: Install staticcheck
         run: go install honnef.co/go/tools/cmd/staticcheck@latest
 
       - name: Run staticcheck
         run: staticcheck ./...
-        working-directory: ./practice/go/base
+        working-directory: ./go

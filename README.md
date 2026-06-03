@@ -4,6 +4,8 @@ Curated software engineering portfolio featuring Go, Terraform, GitHub Actions, 
 
 All commits and updates (besides README, Actions Workflows and ignores) are automatically synced through GitHub Actions from a private repository. `lucky-function` is a demo GCP project that is managed with Terragrunt
 
+If you would like to collaborate on a project, let us know so we can give access to the appropriate source repo
+
 ## Highlights
 
 - Go development
@@ -12,3 +14,7 @@ All commits and updates (besides README, Actions Workflows and ignores) are auto
 - Cloud infrastructure
 - (future) Kubernetes deployments
 - Testing and code coverage
+
+## ToDo
+
+- Reusable workflows & actions

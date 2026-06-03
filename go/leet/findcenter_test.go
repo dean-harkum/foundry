@@ -1,7 +1,7 @@
 package leet
 
 import (
-	// "go/utils"
+	// "github.com/dean-harkum/foundry/go/utils"
 	"testing"
 )
 

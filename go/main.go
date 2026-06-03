@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go/leet"
+	"github.com/dean-harkum/foundry/go/leet"
 )
 
 func main() {

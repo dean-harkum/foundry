@@ -32,17 +32,12 @@ jobs:
         run: golangci-lint run ./...
         working-directory: ./go
 
-      - name: Run tests and generate coverage report
-        run: go test -coverprofile=coverage.out ./...
-        working-directory: ./go
+      - name: Run tests
+        run: go test -coverprofile=coverage.txt
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4.0.1
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
         with:
-          file: coverage.out
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Build

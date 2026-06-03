@@ -34,6 +34,7 @@ jobs:
 
       - name: Run tests
         run: go test -coverprofile=coverage.txt
+        working-directory: ./go/leet
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5

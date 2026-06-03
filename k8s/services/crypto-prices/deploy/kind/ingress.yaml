@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  name: crypto
+spec:
+  rules:
+    - host: crypto-prices.kind.localdomain.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: crypto-service
+              servicePort: 80
+          - path: /testing
+            backend:
+              serviceName: crypto-service
+              servicePort: 81
+  tls:
+    - hosts:
+        - crypto-prices.kind.localdomain.com
+      secretName: cert-kind-wildcard

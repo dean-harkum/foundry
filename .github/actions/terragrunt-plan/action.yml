@@ -1,0 +1,18 @@
+inputs:
+  target:
+    description: "Which Terragrunt plan to run"
+    required: true
+  gcp_state_project:
+    description: "GCP project for Terraform state"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Run Terragrunt plan
+      env:
+        GOOGLE_PROJECT_VAR: ${{ inputs.gcp_state_project }}
+      shell: bash
+      run: |
+        cd terragrunt/lucky-function/${{ inputs.target }}
+        terragrunt ${{ inputs.target == 'demo-stack' && 'run-all plan' || 'plan' }} --terragrunt-non-interactive
